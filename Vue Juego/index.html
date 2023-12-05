@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Basics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Monster Slayer</h1>
+    </header>
+    <div id="game">
+      <section id="monster" class="container">
+        <h2>Monster Health</h2>
+        <div class="healthbar">
+          <div class="healthbar__value" :style="estilosBarraMonster"></div>
+        </div>
+      </section>
+      <section id="player" class="container">
+        <h2>Your Health</h2>
+        <div class="healthbar">
+          <div class="healthbar__value" :style="estilosBarraJugador"></div>
+        </div>
+      </section>
+      <section class="container" v-if="ganador">
+        <h2>Game Over!</h2>
+        <h3 v-if="ganador === 'monster'">You Lost!</h3>
+        <h3 v-else-if="ganador === 'player'">You Won!</h3>
+        <h3 v-else>It's a Draw!</h3>
+        <button @click="startGame">Start New Game</button>
+      </section>
+      <section id="controls" v-else>
+        <button @click="ataqueMonster">ATTACK</button>
+        <button :disabled="cooldownAtaqueEspecial" @click="ataqueEspecial">SPECIAL ATTACK</button>
+        <button @click="curarJugador">HEAL</button>
+        <button @click="rendirse">SURRENDER</button>
+      </section>
+      <section id="log" class="container">
+        <h2>Battle Log</h2>
+        <ul>
+          <li v-for="accion in acciones">
+            <span :class="{'log--player': accion.actionBy === 'Jugador', 'log--monster': accion.actionBy === 'Monstruo'}">{{ accion.actionBy === 'Jugador' ? 'Jugador' : 'Monstruo' }}</span>
+            <span v-if="accion.actionType === 'Curacion'"> Se Curo <span class="log--heal">{{ accion.actionValue }}</span> de vida </span>
+            <span v-else> ataca y hace <span class="log--damage">{{ accion.actionValue }}</span> de daño</span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
